@@ -28,14 +28,14 @@ export interface SoundData {
 const soundsData :  {[key:string]: SoundData} = {
       rain: {
         title: "Rain",
-        soundSource: "public/sounds/rain.wav",
+        soundSource: "sounds/rain.wav",
         videoSource: "Video/Raindrops.mp4",
         imageSource: "images/rain.jpg",
         icon: faCloudRain,
       },
       rain3: {
         title: "Rain Heavy",
-        soundSource: "public/sounds/rain3.wav",
+        soundSource: "sounds/rain3.wav",
         videoSource: "Video/Raindrops.mp4",
         imageSource: "images/rain.jpg",
         icon: faCloudShowersHeavy,
