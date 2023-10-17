@@ -1,8 +1,9 @@
 .container {
     display: flex;
     flex-direction: column;
-    gap: 1rem;
-    height: calc(100vh - 240px);
+    align-items: center;
+    justify-content: space-around;
+    height: calc(100vh - 70px);
 }
 
 .sound_map {
