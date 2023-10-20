@@ -6,25 +6,21 @@ import styles from './soundcard.module.css';
 
 const RelaxSoundsMap: React.FC = () => {
   const [audioPlayers, setAudioPlayers] = useState<Record<string, HTMLAudioElement>>({});
-  const [activeSounds, setActiveSounds] = useState<Record<string, boolean>>({});
+  const [activeSounds, setActiveSounds] = useState<string[]>([]);
+  const [savedSounds, setSavedSounds] = useState<string[]>([]);
 
   const handleSoundClick = (sound: SoundData) => {
     const audioPlayer = audioPlayers[sound.title] || new Audio(sound.soundSource);
+    
 
-    if (activeSounds[sound.title]) {
+    if (activeSounds.includes(sound.title)) {
       audioPlayer.pause();
       audioPlayer.currentTime = 0;
-      setActiveSounds((prevActiveSounds) => ({
-        ...prevActiveSounds,
-        [sound.title]: false,
-      }));
+      setActiveSounds((prevActiveSounds) => prevActiveSounds.filter((title) => title !== sound.title));
     } else {
       audioPlayer.loop = true;
       audioPlayer.play();
-      setActiveSounds((prevActiveSounds) => ({
-        ...prevActiveSounds,
-        [sound.title]: true,
-      }));
+      setActiveSounds((prevActiveSounds) => [...prevActiveSounds, sound.title]);
     }
 
     setAudioPlayers((prevAudioPlayers) => ({
@@ -36,30 +32,27 @@ const RelaxSoundsMap: React.FC = () => {
   };
 
   const handlePlayPause = () => {
-    // Ваша логика для паузы/воспроизведения здесь
-    // Пример:
-    // Если хотя бы один звук играет, поставьте их все на паузу
-    // Иначе возобновите их воспроизведение
-    const isAnyPlaying = Object.values(activeSounds).some((playing) => playing);
+    const isAnyPlaying = activeSounds.length > 0;
 
     if (isAnyPlaying) {
-      // Поставить на паузу все активные звуки
-      Object.values(audioPlayers).forEach((player) => {
-        player.pause();
-        player.currentTime = 0;
+      // Сохраняем активные звуки перед паузой
+      setSavedSounds(activeSounds);
+
+      activeSounds.forEach((title) => {
+        const audioPlayer = audioPlayers[title];
+        audioPlayer.pause();
+        audioPlayer.currentTime = 0;
       });
-      setActiveSounds({});
+
+      setActiveSounds([]);
     } else {
-      // Возобновить воспроизведение всех звуков
-      Object.values(audioPlayers).forEach((player) => {
-        player.loop = true;
-        player.play();
+      // Восстанавливаем активные звуки после паузы
+      setActiveSounds(savedSounds);
+
+      savedSounds.forEach((title) => {
+        const audioPlayer = audioPlayers[title];
+        audioPlayer.play();
       });
-      const newActiveSounds: Record<string, boolean> = {};
-      Object.keys(audioPlayers).forEach((key) => {
-        newActiveSounds[key] = true;
-      });
-      setActiveSounds(newActiveSounds);
     }
   };
 
@@ -76,13 +69,28 @@ const RelaxSoundsMap: React.FC = () => {
     }
   };
 
+  const handleVolumeChangeAll = (volume: number) => {
+    // Обновляем громкость всех активных звуков
+    activeSounds.forEach((title) => {
+      const audioPlayer = audioPlayers[title];
+      audioPlayer.volume = volume;
+    });
+  };
+
+  const handleMuteAll = () => {
+    activeSounds.forEach((title) => {
+      const audioPlayer = audioPlayers[title];
+      audioPlayer.volume = 0;
+    });
+  };
+
   return (
     <div className={styles.container}>
       <h1>Relax Sounds</h1>
       <ul className={styles.sound_map}>
-        {Object.keys(soundsData).map((key) => {
+      {Object.keys(soundsData).map((key) => {
           const sound = soundsData[key];
-          const isCurrentPlaying = activeSounds[sound.title];
+          const isCurrentPlaying = activeSounds.includes(sound.title);
 
           return (
             <li key={key} className={`${styles.sound_card} ${isCurrentPlaying ? styles.sound_card_playing : ''}`}>
@@ -105,7 +113,12 @@ const RelaxSoundsMap: React.FC = () => {
           );
         })}
       </ul>
-    <Playeer isPlaying={Object.values(activeSounds).some((playing) => playing)} handlePlayPause={handlePlayPause} />
+      <Playeer 
+      isPlaying={activeSounds.length > 0} 
+      handlePlayPause={handlePlayPause}
+      handleVolumeChangeAll={handleVolumeChangeAll}
+      handleMuteAll={handleMuteAll}
+       />
     </div>
   );
 };

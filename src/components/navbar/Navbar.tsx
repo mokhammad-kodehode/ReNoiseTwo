@@ -7,8 +7,6 @@ const Navbar: React.FC = () => {
       <nav className={styles.navbar}>
         <a className={styles.logo} href="#">ReNoise</a>
         <ul className={styles.items}>
-            <li className={styles.item}>Video Sounds</li>
-            <li className={styles.item}>Sounds</li>
             <li className={styles.item}>About Us</li>
         </ul>
       </nav>
