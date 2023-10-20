@@ -76,3 +76,27 @@ button {
     background-color: transparent;
     border: none;
 }
+
+
+@media (max-width: 844px) { 
+    .media_section {
+        bottom: 0;
+        position: fixed;
+        display: flex;
+        flex-direction: column;
+        z-index: 1;
+        align-items: center;
+        background: cover;
+        padding: 20px;
+        width: 100%;
+        background-image: linear-gradient(to right,
+                           rgba(0, 0, 0, 0.8),
+                           rgba(0, 0, 0, 0.9),
+                           rgba(0, 0, 0, 1), 
+                           rgba(0, 0, 0, 1),
+                           rgba(0, 0, 0, 1),
+                            rgba(0, 0, 0, 0.9),
+                            rgba(0, 0, 0, 0.8));
+      }
+
+}

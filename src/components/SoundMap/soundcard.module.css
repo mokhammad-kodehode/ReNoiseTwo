@@ -81,3 +81,78 @@ h1 {
     text-align: center;
   }
 
+  @media (max-width: 844px) {
+    .container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-around;
+        height: 100%;
+        width: 100%;
+        padding: 10px 0;
+        gap: 2rem;
+    }
+    
+    .sound_map {
+        display: grid;
+        grid-template-columns: repeat(3, auto);;
+       gap: 1.5rem;
+       align-items: center;
+       justify-content: center;
+        list-style-type: none;
+    }
+    
+
+    
+    .sound_card {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: .1rem;
+        position: relative;
+    }
+    
+    .sound_card_playing .button{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        border: 2px rgb(255, 255, 255) solid;
+        border-radius: 50%;
+        padding: 10px;
+        transform: scale(1.1);
+        transition: 0.5s;
+        background-color: black;
+        width: 90px;
+        height: 90px;
+    }
+    
+    .icon {
+        font-size: 36px;
+    }
+    
+    .button {
+        background-color: transparent;
+        cursor: pointer;
+        border: 2px white solid;
+        border-radius: 50%;
+        padding: 10px;
+        width: 90px;
+        height: 90px;
+        cursor: pointer;
+    }
+    
+    .slider{
+        width: 80px;
+        height: 20px; /* Примерная высота */
+        position: absolute;
+        bottom: -20px;
+    }
+    
+    h1 {
+        font-size: 3.2em;
+        line-height: 1.1;
+        text-align: center;
+      }
+  }
