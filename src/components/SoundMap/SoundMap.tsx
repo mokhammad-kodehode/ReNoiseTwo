@@ -8,6 +8,17 @@ const RelaxSoundsMap: React.FC = () => {
   const [audioPlayers, setAudioPlayers] = useState<Record<string, HTMLAudioElement>>({});
   const [activeSounds, setActiveSounds] = useState<string[]>([]);
   const [savedSounds, setSavedSounds] = useState<string[]>([]);
+  
+
+  const stopAllSounds = () => {
+    activeSounds.forEach((title) => {
+      const audioPlayer = audioPlayers[title];
+      audioPlayer.pause();
+      audioPlayer.currentTime = 0;
+    });
+    setActiveSounds([]); 
+    console.log('All sounds stopped');// Очищаем список активных звуков
+  };
 
   const handleSoundClick = (sound: SoundData) => {
     const audioPlayer = audioPlayers[sound.title] || new Audio(sound.soundSource);
@@ -35,7 +46,7 @@ const RelaxSoundsMap: React.FC = () => {
     const isAnyPlaying = activeSounds.length > 0;
 
     if (isAnyPlaying) {
-      // Сохраняем активные звуки перед паузой
+
       setSavedSounds(activeSounds);
 
       activeSounds.forEach((title) => {
@@ -46,7 +57,7 @@ const RelaxSoundsMap: React.FC = () => {
 
       setActiveSounds([]);
     } else {
-      // Восстанавливаем активные звуки после паузы
+
       setActiveSounds(savedSounds);
 
       savedSounds.forEach((title) => {
@@ -70,7 +81,8 @@ const RelaxSoundsMap: React.FC = () => {
   };
 
   const handleVolumeChangeAll = (volume: number) => {
-    // Обновляем громкость всех активных звуков
+
+  
     activeSounds.forEach((title) => {
       const audioPlayer = audioPlayers[title];
       audioPlayer.volume = volume;
@@ -83,6 +95,8 @@ const RelaxSoundsMap: React.FC = () => {
       audioPlayer.volume = 0;
     });
   };
+
+
 
   return (
     <div className={styles.container}>
@@ -118,6 +132,7 @@ const RelaxSoundsMap: React.FC = () => {
       handlePlayPause={handlePlayPause}
       handleVolumeChangeAll={handleVolumeChangeAll}
       handleMuteAll={handleMuteAll}
+      stopAllSounds={stopAllSounds}
        />
     </div>
   );

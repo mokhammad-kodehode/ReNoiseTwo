@@ -37,6 +37,7 @@ cursor: pointer;
     gap: 1.6rem;
     padding: 10px;
     z-index: 1;
+    height: 150px;
 }
 
 .volume {
@@ -76,6 +77,64 @@ button {
     background-color: transparent;
     border: none;
 }
+
+.clock {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 2rem;
+    position: relative;
+    /* Установите фиксированную высоту */
+}
+
+.clockIcon {
+    font-size: 34px;
+    cursor: pointer;
+}
+
+.timeList {
+    position: absolute; /* Позиционируем абсолютно */
+    top: -5px; /* Разместить под .clock */
+    left: 50px;
+    display: flex;
+    flex-direction: column;
+    justify-content:start;
+    align-items: center;
+    max-height: 50px; /* Ограничиваем максимальную высоту */
+    overflow: auto;
+    width: 150px;
+    list-style: none;
+    font-size: 18px;
+}
+
+
+select {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background: transparent; /* Цвет фона */
+    border: 1px solid #ccc; /* Граница */
+    padding: 8px; /* Отступы вокруг текста */
+    border-radius: 4px; /* Закругленные углы */
+    font-size: 16px; /* Размер шрифта */
+    color: #f9f9f9; /* Цвет текста */
+  }
+  
+  /* Стили при наведении курсора */
+  select:hover {
+    background-color: transparent;
+    border-color: #666; /* Изменение цвета границы при наведении */
+  }
+  
+  /* Стили при фокусе (когда элемент активен) */
+  select:focus {
+    outline: none; /* Убираем стандартное выделение при фокусе */
+    border-color: #0099cc; /* Цвет границы при фокусе */
+    box-shadow: 0 0 5px #0099cc; /* Тень при фокусе */
+    background: #666;
+  }
+
+
 
 
 @media (max-width: 844px) { 
