@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styles from './playeer.module.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {faVolumeUp, faVolumeMute, faPause, faCirclePlay, faClock } from '@fortawesome/free-solid-svg-icons';
@@ -14,6 +14,7 @@ interface PlayeerProps {
 const Playeer: React.FC<PlayeerProps> = ({ isPlaying, handlePlayPause, handleVolumeChangeAll, handleMuteAll,  stopAllSounds }) => {
       const [isMuted, setIsMuted] = useState(false)
       const [isTimePickerOpen, setIsTimePickerOpen] = useState(false);
+      const [selectedTime, setSelectedTime] = useState('');
 
       const toggleTimePicker = () => {
         setIsTimePickerOpen(!isTimePickerOpen);
@@ -58,6 +59,24 @@ const Playeer: React.FC<PlayeerProps> = ({ isPlaying, handlePlayPause, handleVol
           }, time * 60 * 1000); // Переводим время из минут в миллисекунды
         };
         
+        const startTimerAtTime = (time : string) => {
+          const now = new Date();
+          const [hours, minutes] = time.split(':').map(Number);
+          const targetTime = new Date(now.getFullYear(), now.getMonth(), now.getDate(), hours, minutes);
+        
+          if (targetTime <= now) {
+            targetTime.setDate(targetTime.getDate() + 1); // Если выбранное время уже прошло, то устанавливаем его на следующий день
+          }
+        
+          const timeDifference = targetTime.getTime() - now.getTime();
+        
+          console.log(`Timer started at ${time}`);
+        
+          setTimeout(() => {
+            stopAllSounds(); // Останавливаем звуки по указанному времени
+            console.log(`Timer ended at ${time}`);
+          }, timeDifference);
+        };
 
   return (
     <div className={`${styles.media_section} ${isPlaying ? styles.show : ''}`}>
@@ -79,26 +98,46 @@ const Playeer: React.FC<PlayeerProps> = ({ isPlaying, handlePlayPause, handleVol
             onClick={handleMuteClick}
             
              />
-          <div className={styles.clock}>
-            <FontAwesomeIcon className={styles.clockIcon} icon={faClock} onClick={toggleTimePicker} />
-            {isTimePickerOpen ? (
-              <select
-              className={styles.timeList}
-                name="timeSelect"
-                id="timeSelect"
-                onChange={(e) => selectTime(parseInt(e.target.value))}
-                defaultValue="" // Значение по умолчанию
-              >
-                <option className={styles.timeItem} value="" disabled>Select time</option>
-                <option value="1">1 minutes</option>
-                <option value="5">5 minutes</option>
-                <option value="15">15 minutes</option>
-                <option value="30">30 minutes</option>
-                <option value="45">45 minutes</option>
-                <option value="60">60 minutes</option>
-              </select>
-            ) : null}
-          </div>
+                  <div className={styles.clock}>
+                    <FontAwesomeIcon className={styles.clockIcon} icon={faClock} onClick={toggleTimePicker} />
+                    {isTimePickerOpen ? (
+                      <div className={styles.timePickerContainer}>
+                        <h2>Fade-out Timer</h2>
+                        <div className={styles.pickers}>
+                              <div className={styles.afterDur}>
+                                  <label htmlFor="timeSelect">After a duration</label>
+                                  <select
+                                    className={styles.timeList}
+                                    name="timeSelect"
+                                    id="timeSelect"
+                                    onChange={(e) => selectTime(parseInt(e.target.value))}
+                                    defaultValue="" // Значение по умолчанию
+                                  >
+                                    <option className={styles.timeItem} value="" disabled>Select time</option>
+                                    <option value="15">15 minutes</option>
+                                    <option value="30">30 minutes</option>
+                                    <option value="45">45 minutes</option>
+                                    <option value="60">60 minutes</option>
+                                  </select>
+                              </div>
+                              <span>or</span> {/* Добавляем текст "or" между выборами */}
+                              <div className={styles.afterTime}>
+                                  <label htmlFor="time">After a time</label>
+                                  <input
+                                    type="time"
+                                    className={styles.timeInput}
+                                    value={selectedTime}
+                                    onChange={(e) => setSelectedTime(e.target.value)}
+                                    onBlur={() => {
+                                      console.log(`Selected time: ${selectedTime}`);
+                                      startTimerAtTime(selectedTime);
+                                    }}
+                                  />
+                              </div>
+                        </div>
+                      </div>
+                    ) : null}
+                  </div>
         </div>
       </div>
     </div>
