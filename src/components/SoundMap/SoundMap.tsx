@@ -134,6 +134,7 @@ const RelaxSoundsMap: React.FC = () => {
       handleMuteAll={handleMuteAll}
       stopAllSounds={stopAllSounds}
        />
+       
     </div>
   );
 };
